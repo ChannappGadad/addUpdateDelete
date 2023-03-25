@@ -10,8 +10,7 @@ import {
 function App() {
   //List of the items 
   const[toDo, setTodo] = useState([
-    {"id": 1, "title": "Task1", "status": false},
-    {"id": 2, "title": "Task2", "status": false}
+
   ]);
 
   //MakingnewTaks, updating
@@ -34,7 +33,8 @@ function App() {
 
   //DeleteTask, id to identify
   const deleteTask = (id) => {
-
+    let newListArry = toDo.filter(allID => allID.id != id)
+    setTodo(newListArry);
   }
 
   //cancelUpdate
@@ -48,8 +48,14 @@ function App() {
   }
 
   //Also to mark the task which are done
-  const markDone = () => {
-
+  const markDone = (id) => {
+    let newTask = toDo.map((element) => {
+      if(element.id === id) {
+        return({...element, status: !element.status})
+      }
+      return element
+    })
+    setTodo(newTask)
   }
 
   //updateTask task which are done
@@ -93,13 +99,31 @@ function App() {
                 </div>
                 {/* Below is icons for edit update.... */}
                 <div className='iconsWrap'>
-                  <span>
+                  <span 
+                    onClick={() => {markDone(task.id)}}
+                    title='Completed/ Not Completed'>
+
                     <FontAwesomeIcon icon={faCircleCheck}/>
                   </span>
-                  <span>
-                  <FontAwesomeIcon icon={faPen}/>
-                  </span>
-                  <span>
+                  {task.status ? null : (
+                    <span 
+                    onClick={() => setUpdateTask({
+                      id: task.id,
+                      title: task.title,
+                      status: task.status ? true : false
+                    })
+
+                    }
+                      title='Edit'>
+                      <FontAwesomeIcon icon={faPen}/>
+                    </span>                      
+                  )}
+
+                  <span 
+                    onClick={() => {
+                      deleteTask(task.id)
+                    }}
+                    title='Delete'>
                   <FontAwesomeIcon icon={faTrashCan}/>
                   </span>
                 </div>
